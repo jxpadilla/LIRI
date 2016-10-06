@@ -19,18 +19,18 @@ switch(process.argv[2]) {
 
 
 function getTweets(){
-  var client = new Twitter({
-    consumer_key: 'DpZJaLOjYXjU4i7HyeReAVATS',
-    consumer_secret: '2FXIaWLZVPFRGZsbiRwAUjmsswnRjPKc5iHO65ntxxA4GTQGAg',
-    access_token_key: '783343334177722369-f4Sy7ua1HtXI7iIqGPIozPTTyIImdd6',
-    access_token_secret: 'hwbgNVXG0WwIOAvdA7ivcsSbFSRqUrB61xE1WzJaCOZPe',
-  });
+  var client = new Twitter(twitterKeys.twitterKeys
+    // consumer_key: 'DpZJaLOjYXjU4i7HyeReAVATS',
+    // consumer_secret: '2FXIaWLZVPFRGZsbiRwAUjmsswnRjPKc5iHO65ntxxA4GTQGAg',
+    // access_token_key: '783343334177722369-f4Sy7ua1HtXI7iIqGPIozPTTyIImdd6',
+    // access_token_secret: 'hwbgNVXG0WwIOAvdA7ivcsSbFSRqUrB61xE1WzJaCOZPe',
+ );
    
   var params = {q: '@jimmyfallon', count: '0'};
   client.get('search/tweets', params, function(error, tweets, response){
     if (!error) {
       for (var i = 0; i < 5; i++) {
-        console.log(tweets);
+        console.log(tweets.statuses[i].text);
         }
     }else{
       console.log(error);
@@ -40,18 +40,13 @@ function getTweets(){
 
 function getSpotify(){
   spotify.search({ type: 'track', query: (defaultName)}, function(err, data) {
-  //   if (data.tracks.items[0].name === 'undefined'){
-  //   spotify.search({ type: 'track', query: "What's my age again"});
-  //   console.log("this is crap");
-  // }
     if (err) {
-        defaultName = "What's my age again";
+        defaultName = "Error";
         //getSpotify();
         console.log('Error occurred: ' + err);
-        console.log("Artist: " +data.tracks.items[0].artists[0].name);
+        // console.log("Artist: " +data.tracks.items[0].artists[0].name);
         return;
-        }
-    else if (data) {
+    }else if (data) {
       console.log("Displaying the top 3 hits from your search");
       for (var i = 0; i < 3; i++) {
         console.log("Artist: " +data.tracks.items[i].artists[0].name);
@@ -66,7 +61,7 @@ function getSpotify(){
 
 
 function movieThis(){
-    request('http://www.omdbapi.com/?' + 't' + '&plot=short&tomatoes=true&r=json',function (error, response, body) {
+    request('http://www.omdbapi.com/?' + 'title' + '&plot=short&tomatoes=true&r=json',function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var movieObj = JSON.parse(body);
         if (movieObj.Response == 'False') {
