@@ -4,4 +4,4 @@ module.exports = {
     access_token_key: '783343334177722369-f4Sy7ua1HtXI7iIqGPIozPTTyIImdd6',
     access_token_secret: 'hwbgNVXG0WwIOAvdA7ivcsSbFSRqUrB61xE1WzJaCOZPe',
 
-}
+};

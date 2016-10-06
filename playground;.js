@@ -1,4 +1,4 @@
-debugger;
+// debugger;
 var keys = require("./keys.js");
 var fs = require("fs");
 var twits = new keys();
@@ -25,21 +25,21 @@ function initializer(){
     //   result = doIt(params);
       // break;
   }
-
+}
 
 function lastTweets(){
-    var params = {screen_name: "jxpaustex"};
+    var params = {screen_name: "jimmyfallon"};
     twits.twitterKeys.get("statuses/user_timeline", params, function(err, tweets, response){
       if (!err) {
         console.log("Last 20 tweets:");
         for (var i = 0; i < 20; i++) {
           console.log((i+1)+". "+tweets[i].text);
-        };
+        }
       } else if (err) {
         console.log(err);
       }
     });
-};
+}
 
 console.log(result);
 
