@@ -1,0 +1,26 @@
+{
+  "name": "liri",
+  "version": "1.0.0",
+  "description": "",
+  "main": "liri.js",
+  "dependencies": {
+    "spotify": "^0.3.0",
+    "request": "^2.75.0",
+    "twitter": "^1.4.0",
+    "file-system": "^2.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jxpadilla/liri.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jxpadilla/liri/issues"
+  },
+  "homepage": "https://github.com/jxpadilla/liri#readme"
+}
