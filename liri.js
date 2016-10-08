@@ -1,13 +1,18 @@
 // debugger;
 var Twitter = require('twitter');
-var twitterKeys = require("./keys.js");
 var spotify = require('spotify');
+var twitterKeys = require("./keys.js");
 var request = require('request');
+var fs = require('fs');
+var client = new Twitter(twitterKeys.twitterKeys);
+var defaultSong = 'The Sign';
+var defaultMovie = 'Mr. Nobody';
+var defaultInput = process.argv[2];
 var defaultName = process.argv[3];
 
-switch(process.argv[2]) {
+switch(defaultInput) {
   case "my-tweets":
-    getTweets();
+    myTweets();
     break;
   case "spotify-this-song":
     getSpotify();
@@ -18,19 +23,14 @@ switch(process.argv[2]) {
   }
 
 
-function getTweets(){
-  var client = new Twitter(twitterKeys.twitterKeys
-    // consumer_key: 'DpZJaLOjYXjU4i7HyeReAVATS',
-    // consumer_secret: '2FXIaWLZVPFRGZsbiRwAUjmsswnRjPKc5iHO65ntxxA4GTQGAg',
-    // access_token_key: '783343334177722369-f4Sy7ua1HtXI7iIqGPIozPTTyIImdd6',
-    // access_token_secret: 'hwbgNVXG0WwIOAvdA7ivcsSbFSRqUrB61xE1WzJaCOZPe',
- );
-   
+function myTweets(){
+  fs.appendFileSync('log.txt','text','utf8'); 
   var params = {q: '@jimmyfallon', count: '0'};
   client.get('search/tweets', params, function(error, tweets, response){
     if (!error) {
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < 20; i++) {
         console.log(tweets.statuses[i].text);
+        console.log('==========================================================');
         }
     }else{
       console.log(error);
@@ -38,30 +38,40 @@ function getTweets(){
   });
 }
 
-function getSpotify(){
-  spotify.search({ type: 'track', query: (defaultName)}, function(err, data) {
-    if (err) {
-        defaultName = "Error";
-        //getSpotify();
-        console.log('Error occurred: ' + err);
-        // console.log("Artist: " +data.tracks.items[0].artists[0].name);
-        return;
-    }else if (data) {
-      console.log("Displaying the top 3 hits from your search");
-      for (var i = 0; i < 3; i++) {
-        console.log("Artist: " +data.tracks.items[i].artists[0].name);
-        console.log("Song Name: " +data.tracks.items[i].name);
-        console.log("Preview Link: "+data.tracks.items[i].href);
-        console.log("Album Name: "+data.tracks.items[i].album.name);
+
+function spotifyThis(){
+  if (defaultName === undefined) {
+      spotify.search({type: 'track', query: '"The+Sign" artist:"Ace+of+Base"&limit=5'}, function (err,data) {
+        if (err) {
+          return console.log(err);
+        } else {
+          // console.log(data); console.log('Artist:', data.tracks.items[0].artists[0].name)
+          console.log('Track:', data.tracks.items[0].name);
+          console.log('Preview Link:', data.tracks.items[0].preview_url);
+          console.log('Album:', data.tracks.items[0].album.name);
+          }
+      });
+  } else {
+      spotify.search({type: 'track', query: defaultName + '&limit=5'}, function (err,data) {
+        if (err) {
+          return console.log(err);
+        } else {
+          if (data.tracks.items.length === 0) {
+            return console.log('Track not found, please try again');
+          }
+          // console.log(data);
+          console.log('Artist:', data.tracks.items[0].artists[0].name);
+          console.log('Track:', data.tracks.items[0].name);
+          console.log('Preview Link:', data.tracks.items[0].preview_url);
+          console.log('Album:', data.tracks.items[0].album.name);
+          console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
         }
-      }
-    });
+      });        
   }
-
-
-
+}
+      
 function movieThis(){
-    request('http://www.omdbapi.com/?' + 'title' + '&plot=short&tomatoes=true&r=json',function (error, response, body) {
+    request('http://www.omdbapi.com/?' + '&t' + '&plot=short&tomatoes=true&r=json',function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var movieObj = JSON.parse(body);
         if (movieObj.Response == 'False') {
@@ -76,6 +86,7 @@ function movieThis(){
         console.log(movieObj.Actors);
         console.log(movieObj.tomatoRating);
         console.log(movieObj.tomatoURL);
+        console.log('---------------------------------------------------------------');
        }
         }
     });
@@ -83,7 +94,7 @@ function movieThis(){
  
 
 movieThis();
-getSpotify();
-getTweets();
+spotifyThis();
+myTweets();
 
 
